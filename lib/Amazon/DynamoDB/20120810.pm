@@ -79,6 +79,7 @@ sub algorithm { 'AWS4-HMAC-SHA256' }
 sub scope { shift->{scope} }
 sub access_key { shift->{access_key} }
 sub secret_key { shift->{secret_key} }
+sub token { shift->{token} }
 sub debug_failures { shift->{debug} }
 
 sub max_retries { shift->{max_retries} }
@@ -898,7 +899,8 @@ method make_request(Str :$target,
     }        
 
     my $signer = AWS::Signature4->new(-access_key => $self->access_key,
-                                      -secret_key => $self->secret_key);
+                                      -secret_key => $self->secret_key,
+                                      -security_token => $self->token);
     
     $signer->sign($req);
     return $req;
